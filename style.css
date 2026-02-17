@@ -1,15 +1,12 @@
 :root {
     --soil1: #8B5A2B;
     --soil2: #7a4e24;
-    --soil3: #6b4423;
     --soil4: #5a381a;
 
     --grass1: #6dbb5f;
     --grass2: #5aa84e;
-    --grass3: #4c9642;
 
     --ui-yellow: #f4c430;
-    --ui-dark: #111;
 }
 
 /* RESET */
@@ -31,21 +28,23 @@ body {
             #6fb6d6 40px,
             #6fb6d6 80px
         );
+
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100dvh;
-    overflow: hidden;
+
+    min-height: 100vh;
 }
 
-/* GAME CONTAINER */
+/* GAME WRAPPER */
 .game-wrapper {
-    width: 360px;
-    height: 640px;
-    border: 6px solid black;
-    background: #fff;
+    width: 100%;
+    max-width: 420px;
+    height: 100vh;
     display: flex;
     flex-direction: column;
+    border: 6px solid black;
+    background: white;
 }
 
 /* HEADER */
@@ -58,12 +57,11 @@ body {
 }
 
 .header h1 {
-    font-size: 15px;
-    letter-spacing: 2px;
+    font-size: 14px;
 }
 
 .balance {
-    font-size: 10px;
+    font-size: 9px;
     margin-top: 6px;
 }
 
@@ -76,23 +74,20 @@ body {
     border: 3px solid black;
     font-size: 14px;
     padding: 6px;
+    cursor: pointer;
 }
 
-/* ========================= */
-/* FARM AREA */
-/* ========================= */
-
+/* FARM */
 .farm {
     flex-grow: 1;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-
-    gap: 0;              /* TILE RAPET */
-    padding: 0;          /* NO SPACE */
+    gap: 0;
+    padding: 4px;
 
     background:
         repeating-linear-gradient(
-            45deg,
+            0deg,
             var(--grass1),
             var(--grass1) 8px,
             var(--grass2) 8px,
@@ -100,51 +95,44 @@ body {
         );
 }
 
-/* ========================= */
-/* TILE / PLOT */
-/* ========================= */
-
+/* PLOT */
 .plot {
-    aspect-ratio: 1 / 1; /* INI BIKIN SQUARE */
+    aspect-ratio: 1 / 1;
     width: 100%;
 
     background:
         repeating-linear-gradient(
             0deg,
             var(--soil1),
-            var(--soil1) 3px,
-            var(--soil2) 3px,
-            var(--soil2) 6px
+            var(--soil1) 4px,
+            var(--soil2) 4px,
+            var(--soil2) 8px
         );
 
-    border: 2px solid var(--soil4);
+    border: 3px solid var(--soil4);
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    font-size: 14px;
+    font-size: 16px;
 }
 
-/* GROWING EFFECT */
+/* EFFECT */
 .plot.growing {
     filter: brightness(0.85);
 }
 
-/* READY EFFECT */
 .plot.ready {
     filter: brightness(1.2);
 }
 
-/* ========================= */
-/* STORE PANEL */
-/* ========================= */
-
+/* STORE */
 .store {
+    display: none;
     background: #222;
     padding: 10px;
     border-top: 6px solid black;
-    display: none;
 }
 
 .store.open {
@@ -153,8 +141,9 @@ body {
 
 .store-item {
     background: var(--ui-yellow);
-    padding: 8px;
+    padding: 10px;
     margin-bottom: 8px;
     border: 4px solid #b8860b;
     font-size: 8px;
-    }
+    cursor: pointer;
+}
