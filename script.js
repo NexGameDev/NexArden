@@ -15,8 +15,12 @@ function updateBalance() {
     balanceDisplay.textContent = balance + " N";
 }
 
+/* ========================= */
+/* STORE SYSTEM (FIXED) */
+/* ========================= */
+
 function toggleStore() {
-    store.style.display = store.style.display === "none" ? "block" : "none";
+    store.classList.toggle("open");
 }
 
 function selectSeed(type) {
@@ -24,25 +28,37 @@ function selectSeed(type) {
     toggleStore();
 }
 
-farm.addEventListener("click", function(e) {
+/* ========================= */
+/* FARM CLICK SYSTEM */
+/* ========================= */
+
+farm.addEventListener("click", function (e) {
 
     if (!e.target.classList.contains("plot")) return;
+
     const plot = e.target;
 
-    // PANEN
+    /* ===== PANEN ===== */
     if (plot.classList.contains("ready")) {
-        const sellValue = plot.dataset.sell;
-        balance += parseInt(sellValue);
+
+        const sellValue = parseInt(plot.dataset.sell);
+
+        balance += sellValue;
         updateBalance();
+
         plot.className = "plot";
         plot.textContent = "";
+        plot.removeAttribute("data-sell");
+
         return;
     }
 
+    /* ===== CEK TANAM ===== */
     if (!selectedSeed) return;
     if (balance < selectedSeed.buy) return;
     if (plot.classList.contains("growing")) return;
 
+    /* ===== TANAM ===== */
     balance -= selectedSeed.buy;
     updateBalance();
 
@@ -54,6 +70,11 @@ farm.addEventListener("click", function(e) {
         plot.classList.remove("growing");
         plot.classList.add("ready");
     }, selectedSeed.grow);
+
 });
+
+/* ========================= */
+/* INIT */
+/* ========================= */
 
 updateBalance();
