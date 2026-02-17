@@ -1,131 +1,59 @@
-:root {
-    --soil1: #8B5A2B;
-    --soil2: #7a4e24;
-    --soil3: #6b4423;
-    --soil4: #5a381a;
+let balance = 20;
+let selectedSeed = null;
 
-    --grass1: #3fa34d;
-    --grass2: #2c7a35;
-    --grass3: #24662b;
+const balanceDisplay = document.getElementById("balance");
+const farm = document.getElementById("farm");
+const store = document.getElementById("store");
 
-    --ui-yellow: #f4c430;
-    --ui-dark: #111;
+const seeds = {
+    spinach: { name: "🌿", buy: 5, sell: 8, grow: 3000 },
+    carrot: { name: "🥕", buy: 8, sell: 14, grow: 5000 },
+    corn: { name: "🌽", buy: 12, sell: 20, grow: 8000 }
+};
+
+function updateBalance() {
+    balanceDisplay.textContent = balance + " N";
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    image-rendering: pixelated;
-    font-family: 'Press Start 2P', monospace;
+function toggleStore() {
+    store.style.display = store.style.display === "none" ? "block" : "none";
 }
 
-body {
-    background:
-        repeating-linear-gradient(
-            0deg,
-            #87CEEB,
-            #87CEEB 30px,
-            #6fb6d6 30px,
-            #6fb6d6 60px
-        );
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100dvh;
-    overflow: hidden;
+function selectSeed(type) {
+    selectedSeed = seeds[type];
+    toggleStore();
 }
 
-.game-wrapper {
-    width: 360px;
-    height: 640px;
-    border: 6px solid black;
-    background: #fff;
-    display: flex;
-    flex-direction: column;
-}
+farm.addEventListener("click", function(e) {
 
-.header {
-    background: var(--ui-yellow);
-    border-bottom: 6px solid black;
-    padding: 12px;
-    text-align: center;
-    position: relative;
-}
+    if (!e.target.classList.contains("plot")) return;
+    const plot = e.target;
 
-.header h1 {
-    font-size: 15px;
-    letter-spacing: 2px;
-}
+    // PANEN
+    if (plot.classList.contains("ready")) {
+        const sellValue = plot.dataset.sell;
+        balance += parseInt(sellValue);
+        updateBalance();
+        plot.className = "plot";
+        plot.textContent = "";
+        return;
+    }
 
-.balance {
-    font-size: 10px;
-    margin-top: 6px;
-}
+    if (!selectedSeed) return;
+    if (balance < selectedSeed.buy) return;
+    if (plot.classList.contains("growing")) return;
 
-.store-btn {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    background: #222;
-    color: white;
-    border: 3px solid black;
-    font-size: 14px;
-    padding: 6px;
-}
+    balance -= selectedSeed.buy;
+    updateBalance();
 
-/* ===== FARM ===== */
+    plot.classList.add("growing");
+    plot.textContent = selectedSeed.name;
+    plot.dataset.sell = selectedSeed.sell;
 
-.farm {
-    flex-grow: 1;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 6px;
-    padding: 10px;
+    setTimeout(() => {
+        plot.classList.remove("growing");
+        plot.classList.add("ready");
+    }, selectedSeed.grow);
+});
 
-    background:
-        repeating-linear-gradient(
-            45deg,
-            var(--grass1),
-            var(--grass1) 8px,
-            var(--grass2) 8px,
-            var(--grass2) 16px
-        );
-}
-
-.plot {
-    background:
-        repeating-linear-gradient(
-            0deg,
-            var(--soil1),
-            var(--soil1) 4px,
-            var(--soil2) 4px,
-            var(--soil2) 8px
-        );
-    border: 4px solid var(--soil4);
-    box-shadow:
-        inset -3px -3px var(--soil3),
-        inset 3px 3px #a06a3a,
-        3px 3px 0 black;
-    font-size: 7px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* ===== STORE PANEL ===== */
-
-.store {
-    background: #222;
-    padding: 10px;
-    border-top: 6px solid black;
-    display: none;
-}
-
-.store-item {
-    background: var(--ui-yellow);
-    padding: 8px;
-    margin-bottom: 8px;
-    border: 4px solid #b8860b;
-    font-size: 8px;
-        }
+updateBalance();
