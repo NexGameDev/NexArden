@@ -1,123 +1,172 @@
-let balance = 5;
-let selectedSeed = false;
-let growTime = 10000;
-let sellPrice = 8;
-let seedPrice = 5;
-
-const farm = document.getElementById("farm");
-const balanceText = document.getElementById("balance");
-
-let plots = [];
-
-function updateBalance() {
-    balanceText.innerText = balance + " N";
+:root {
+    --sky: #87CEEB;
+    --sky-dark: #6fb6d6;
+    --soil: #8B5A2B;
+    --soil-dark: #5a381a;
+    --soil-light: #a06a3a;
+    --grass: #3fa34d;
+    --grass-dark: #2c7a35;
+    --ui-yellow: #f4c430;
+    --ui-yellow-dark: #b8860b;
 }
 
-function saveGame() {
-    localStorage.setItem("nexarden_save", JSON.stringify({
-        balance: balance,
-        plots: plots,
-        lastTime: Date.now()
-    }));
+html, body {
+    width: 100%;
+    height: 100%;
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
 }
 
-function loadGame() {
-    const save = localStorage.getItem("nexarden_save");
-    if (save) {
-        const data = JSON.parse(save);
-        balance = data.balance;
-        plots = data.plots;
-
-        let offlineTime = Date.now() - data.lastTime;
-
-        plots.forEach(plot => {
-            if (plot.planted && !plot.ready) {
-                plot.timeLeft -= offlineTime;
-                if (plot.timeLeft <= 0) {
-                    plot.ready = true;
-                }
-            }
-        });
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    image-rendering: pixelated;
+    font-family: 'Press Start 2P', monospace;
 }
 
-function createFarm() {
-    for (let i = 0; i < 9; i++) {
-        let plotDiv = document.createElement("div");
-        plotDiv.classList.add("plot");
-
-        if (!plots[i]) {
-            plots.push({
-                planted: false,
-                ready: false,
-                timeLeft: 0
-            });
-        }
-
-        updatePlotUI(i, plotDiv);
-
-        plotDiv.addEventListener("click", () => handlePlot(i));
-        farm.appendChild(plotDiv);
-    }
+body {
+    background: repeating-linear-gradient(
+        0deg,
+        var(--sky),
+        var(--sky) 40px,
+        var(--sky-dark) 40px,
+        var(--sky-dark) 80px
+    );
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
-function updatePlotUI(index, plotDiv) {
-    let plot = plots[index];
+/* ===== GAME CONTAINER ===== */
 
-    plotDiv.className = "plot";
-
-    if (plot.ready) {
-        plotDiv.classList.add("ready");
-        plotDiv.innerText = "READY";
-    } else if (plot.planted) {
-        plotDiv.classList.add("growing");
-        plotDiv.innerText = "GROWING";
-    } else {
-        plotDiv.innerText = "";
-    }
+.game-wrapper {
+    width: 100%;
+    max-width: 360px;
+    height: 100dvh;
+    max-height: 640px;
+    background: #ffffff;
+    border: 6px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-function handlePlot(index) {
-    let plot = plots[index];
-    let plotDiv = farm.children[index];
+/* ===== HEADER ===== */
 
-    if (!plot.planted && selectedSeed && balance >= seedPrice) {
-        balance -= seedPrice;
-        plot.planted = true;
-        plot.timeLeft = growTime;
-        selectedSeed = false;
-    }
-    else if (plot.ready) {
-        balance += sellPrice;
-        plot.planted = false;
-        plot.ready = false;
-    }
-
-    updatePlotUI(index, plotDiv);
-    updateBalance();
-    saveGame();
+.header {
+    background: var(--ui-yellow);
+    border-bottom: 6px solid black;
+    padding: 16px;
+    text-align: center;
 }
 
-function selectSeed() {
-    selectedSeed = true;
+.header h1 {
+    font-size: 18px;
+    letter-spacing: 6px;
+    text-shadow:
+        4px 4px 0 #000,
+        6px 6px 0 #555;
 }
 
-function gameLoop() {
-    plots.forEach((plot, index) => {
-        if (plot.planted && !plot.ready) {
-            plot.timeLeft -= 1000;
-            if (plot.timeLeft <= 0) {
-                plot.ready = true;
-                updatePlotUI(index, farm.children[index]);
-            }
-        }
-    });
-
-    saveGame();
+.balance {
+    margin-top: 10px;
+    font-size: 12px;
 }
 
-loadGame();
-createFarm();
-updateBalance();
+/* ===== FARM AREA ===== */
 
-setInterval(gameLoop, 1000);
+.farm {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    padding: 12px;
+    flex-grow: 1;
+
+    background: repeating-linear-gradient(
+        45deg,
+        var(--grass),
+        var(--grass) 8px,
+        var(--grass-dark) 8px,
+        var(--grass-dark) 16px
+    );
+}
+
+/* ===== PLOT ===== */
+
+.plot {
+    background:
+        repeating-linear-gradient(
+            0deg,
+            #8B5A2B,
+            #8B5A2B 4px,
+            #7a4e24 4px,
+            #7a4e24 8px
+        );
+
+    border: 4px solid var(--soil-dark);
+
+    box-shadow:
+        inset -4px -4px #3e2612,
+        inset 4px 4px var(--soil-light),
+        3px 3px 0 #000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 8px;
+    text-align: center;
+
+    transition: 0.1s;
+}
+
+.plot:hover {
+    transform: scale(1.05);
+}
+
+.plot:active {
+    transform: scale(0.95);
+}
+
+.plot.growing {
+    background: #6b4423;
+}
+
+.plot.ready {
+    background: #a66b3d;
+    color: #fff;
+}
+
+/* ===== SHOP ===== */
+
+.shop {
+    background: #222;
+    padding: 14px;
+    border-top: 6px solid black;
+}
+
+.shop-title {
+    color: white;
+    margin-bottom: 12px;
+    font-size: 12px;
+}
+
+/* ===== BUTTON ===== */
+
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 10px;
+    background: var(--ui-yellow);
+    border: 4px solid var(--ui-yellow-dark);
+    box-shadow: 4px 4px #8b6508;
+    cursor: pointer;
+}
+
+button:active {
+    transform: translate(4px,4px);
+    box-shadow: none;
+}
