@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>NexArden</title>
+
+<!-- Font Pixel -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -24,6 +28,17 @@
     </div>
 
 </div>
+
+<script>
+/* AUTO GENERATE 25 PLOTS */
+const farm = document.getElementById("farm");
+
+for (let i = 0; i < 25; i++) {
+    const plot = document.createElement("div");
+    plot.classList.add("plot");
+    farm.appendChild(plot);
+}
+</script>
 
 <script src="script.js"></script>
 </body>
