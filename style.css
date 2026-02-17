@@ -9,6 +9,13 @@
     --ui-yellow-dark: #b8860b;
 }
 
+html, body {
+    width: 100%;
+    height: 100%;
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -18,17 +25,21 @@
 }
 
 body {
-    background: linear-gradient(#87CEEB 60%, #3fa34d 60%);
-    height: 100vh;
+    background: linear-gradient(var(--sky) 60%, var(--grass) 60%);
+    min-height: 100dvh; /* FIX Samsung */
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
 }
 
+/* ===== GAME CONTAINER ===== */
+
 .game-wrapper {
-    width: 360px;
-    height: 640px;
+    width: 100%;
+    max-width: 360px;
+    height: 100dvh;
+    max-height: 640px;
     background: #ffffff;
     border: 6px solid black;
     display: flex;
@@ -36,10 +47,12 @@ body {
     justify-content: space-between;
 }
 
+/* ===== HEADER ===== */
+
 .header {
-    background: #f4c430;
+    background: var(--ui-yellow);
     border-bottom: 6px solid black;
-    padding: 10px;
+    padding: 12px;
     text-align: center;
 }
 
@@ -50,10 +63,12 @@ body {
 }
 
 .balance {
-    margin-top: 5px;
+    margin-top: 6px;
     font-size: 18px;
     font-weight: bold;
 }
+
+/* ===== FARM AREA ===== */
 
 .farm {
     display: grid;
@@ -61,14 +76,17 @@ body {
     gap: 10px;
     padding: 15px;
     flex-grow: 1;
+
     background: repeating-linear-gradient(
         45deg,
-        #3fa34d,
-        #3fa34d 10px,
-        #2c7a35 10px,
-        #2c7a35 20px
+        var(--grass),
+        var(--grass) 10px,
+        var(--grass-dark) 10px,
+        var(--grass-dark) 20px
     );
 }
+
+/* ===== PLOT ===== */
 
 .plot {
     background: var(--soil);
@@ -82,6 +100,11 @@ body {
     font-size: 12px;
     font-weight: bold;
     text-align: center;
+    transition: 0.1s;
+}
+
+.plot:active {
+    transform: scale(0.95);
 }
 
 .plot.growing {
@@ -93,26 +116,31 @@ body {
     color: #fff;
 }
 
+/* ===== SHOP ===== */
+
 .shop {
     background: #222;
-    padding: 10px;
+    padding: 12px;
     border-top: 6px solid black;
 }
 
 .shop-title {
     color: white;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     font-size: 16px;
 }
 
+/* ===== BUTTON ===== */
+
 button {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     font-size: 14px;
     font-weight: bold;
     background: var(--ui-yellow);
     border: 4px solid var(--ui-yellow-dark);
     box-shadow: 4px 4px #8b6508;
+    cursor: pointer;
 }
 
 button:active {
