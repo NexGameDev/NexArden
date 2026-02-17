@@ -1,56 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
+    <title>NexArden</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NexArden</title>
+    <!-- Pixel Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div class="game-wrapper">
 
     <div class="header">
         <h1>NEXARDEN</h1>
-        <div class="balance" id="balance">5 N</div>
-
-        <!-- STORE BUTTON -->
-        <button class="store-btn" onclick="toggleStore()">🏪</button>
+        <div class="balance" id="balance">0 N</div>
+        <button class="store-btn" onclick="toggleStore()">🛒</button>
     </div>
 
     <div class="farm" id="farm"></div>
 
-    <!-- STORE PANEL -->
     <div class="store" id="store">
         <div class="store-item" onclick="selectSeed('spinach')">
-            🌿 Water Spinach - 5 N
+            🌿 Spinach - 5N
         </div>
-
         <div class="store-item" onclick="selectSeed('carrot')">
-            🥕 Carrot - 8 N
+            🥕 Carrot - 8N
         </div>
-
         <div class="store-item" onclick="selectSeed('corn')">
-            🌽 Corn - 12 N
+            🌽 Corn - 12N
         </div>
     </div>
 
 </div>
-
-<script>
-/* AUTO GENERATE 25 PLOTS */
-const farm = document.getElementById("farm");
-for (let i = 0; i < 25; i++) {
-    const plot = document.createElement("div");
-    plot.classList.add("plot");
-    farm.appendChild(plot);
-}
-</script>
 
 <script src="script.js"></script>
 </body>
